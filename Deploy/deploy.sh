@@ -31,15 +31,15 @@ serviceName=$deploymentName'-svc'
 storageAccountName=$deploymentName'sa'
 #echo "storage account name " $storageAccountName
 
-#slotname=''
-#testurl=''
+slotname=''
+testurl=''
 if [ $# == 2 ]; then
 	templateFilePath=$PWD'/template.json'
-#	testurl='https://'$serviceName'.azurewebsites.net/api/'
-#elif [ $# == 3 ]; then
-#	templateFilePath=$PWD'/templatewithslot.json'
-#	slotname=$3
-#	testurl='https://'$serviceName'-'$slotname'.azurewebsites.net/api/'
+	testurl='https://'$serviceName'.azurewebsites.net/api/'
+elif [ $# == 3 ]; then
+	templateFilePath=$PWD'/templatewithslot.json'
+	slotname=$3
+	testurl='https://'$serviceName'-'$slotname'.azurewebsites.net/api/'
 else
 	echo "$# parameters are not supported"
 fi
@@ -49,21 +49,21 @@ fi
 echo "Starting deployment..."
 (
     # these parameters match the ones in the ARM template
-	params="{
-		\"functionName\": { \"value\": \"$serviceName\" },
-		\"appServicePlanName\": { \"value\": \"$deploymentName-plan\" },
-		\"applicationInsightsName\": { \"value\": \"$deploymentName-ai\" },
-		\"storageAccountName\": { \"value\": \"$storageAccountName\" },
-		\"location\": { \"value\": \"$resourceGroupLocation\" }
-	}"
 	#params="{
 	#	\"functionName\": { \"value\": \"$serviceName\" },
 	#	\"appServicePlanName\": { \"value\": \"$deploymentName-plan\" },
 	#	\"applicationInsightsName\": { \"value\": \"$deploymentName-ai\" },
 	#	\"storageAccountName\": { \"value\": \"$storageAccountName\" },
-	#	\"location\": { \"value\": \"$resourceGroupLocation\" },
-	#	\"slotName\": { \"value\": \"$slotname\" }
+	#	\"location\": { \"value\": \"$resourceGroupLocation\" }
 	#}"
+	params="{
+		\"functionName\": { \"value\": \"$serviceName\" },
+		\"appServicePlanName\": { \"value\": \"$deploymentName-plan\" },
+		\"applicationInsightsName\": { \"value\": \"$deploymentName-ai\" },
+		\"storageAccountName\": { \"value\": \"$storageAccountName\" },
+		\"location\": { \"value\": \"$resourceGroupLocation\" },
+		\"slotName\": { \"value\": \"$slotname\" }
+	}"
 	#echo $params
 
 	# call the Azure CLI
@@ -77,5 +77,5 @@ fi
 # these values are needed by other tasks
 echo "##vso[task.setvariable variable=serviceName]$serviceName"
 echo "##vso[task.setvariable variable=resourceGroup]$resourceGroupName"
-#echo "##vso[task.setvariable variable=slotname]$slotname"
-#echo "##vso[task.setvariable variable=testurl]$testurl"
+echo "##vso[task.setvariable variable=slotname]$slotname"
+echo "##vso[task.setvariable variable=testurl]$testurl"
