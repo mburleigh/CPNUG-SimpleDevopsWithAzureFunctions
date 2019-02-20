@@ -3,6 +3,20 @@ resources:
 queue:
   name: Hosted VS2017
 steps:
+- task: Npm@1
+  displayName: 'npm custom'
+  inputs:
+    command: custom
+    verbose: false
+    customCommand: 'install mocha'
+
+- task: Npm@1
+  displayName: 'npm test'
+  inputs:
+    command: custom
+    verbose: false
+    customCommand: test
+    
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact: code'
   inputs:
